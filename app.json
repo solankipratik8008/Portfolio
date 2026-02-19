@@ -32,6 +32,9 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "experiments": {
+      "baseUrl": "/Portfolio"
+    }
   }
 }

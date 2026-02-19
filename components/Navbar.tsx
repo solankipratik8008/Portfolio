@@ -90,8 +90,9 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
-  },
+    zIndex: 9999,
+    ...(Platform.OS === 'web' ? { elevation: 9999 } : {}),
+  } as any,
   container: {
     height: NAVBAR_HEIGHT,
     backgroundColor: 'rgba(10, 1, 24, 0.85)',
@@ -142,12 +143,13 @@ const styles = StyleSheet.create({
     padding: SPACING.sm,
   },
   mobileMenu: {
-    backgroundColor: 'rgba(10, 1, 24, 0.95)',
+    backgroundColor: 'rgba(10, 1, 24, 0.98)',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.glassBorder,
     paddingVertical: SPACING.md,
+    zIndex: 9999,
     ...(Platform.OS === 'web'
-      ? { backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }
+      ? { backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', position: 'relative' as any }
       : ({} as any)),
   } as any,
   mobileLink: {
