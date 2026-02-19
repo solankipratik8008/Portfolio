@@ -26,7 +26,7 @@ export const SKILL_CATEGORIES = [
       { name: 'UIKit / Storyboard', level: 88 },
       { name: 'Auto Layout', level: 85 },
       { name: 'Core Data / SQLite', level: 82 },
-      { name: 'MVC Architecture', level: 88 },
+      { name: 'MVVM Architecture', level: 88 },
     ],
   },
   {
