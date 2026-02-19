@@ -16,6 +16,7 @@ import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../consta
 import { PERSONAL_INFO } from '../constants/data';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
+import ExternalLink from './ExternalLink';
 
 export default function ContactSection() {
   const { width } = useWindowDimensions();
@@ -52,33 +53,45 @@ export default function ContactSection() {
             </Text>
 
             {contactItems.map((item) => (
-              <Pressable
-                key={item.label}
-                onPress={() => item.url && Linking.openURL(item.url)}
-                style={styles.contactItem}
-              >
-                <View style={styles.contactIcon}>
-                  <Ionicons name={item.icon} size={20} color={COLORS.accentPrimary} />
+              item.url ? (
+                <ExternalLink
+                  key={item.label}
+                  href={item.url}
+                  style={styles.contactItem}
+                >
+                  <View style={styles.contactIcon}>
+                    <Ionicons name={item.icon} size={20} color={COLORS.accentPrimary} />
+                  </View>
+                  <View>
+                    <Text style={styles.contactLabel}>{item.label}</Text>
+                    <Text style={styles.contactValue}>{item.value}</Text>
+                  </View>
+                </ExternalLink>
+              ) : (
+                <View key={item.label} style={styles.contactItem}>
+                  <View style={styles.contactIcon}>
+                    <Ionicons name={item.icon} size={20} color={COLORS.accentPrimary} />
+                  </View>
+                  <View>
+                    <Text style={styles.contactLabel}>{item.label}</Text>
+                    <Text style={styles.contactValue}>{item.value}</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.contactLabel}>{item.label}</Text>
-                  <Text style={styles.contactValue}>{item.value}</Text>
-                </View>
-              </Pressable>
+              )
             ))}
 
             <View style={styles.socialRow}>
               {socialLinks.map((social) => (
-                <Pressable
+                <ExternalLink
                   key={social.label}
-                  onPress={() => Linking.openURL(social.url)}
+                  href={social.url}
                   style={({ hovered }: any) => [
                     styles.socialBtn,
                     hovered && styles.socialBtnHovered,
                   ]}
                 >
                   <Ionicons name={social.icon} size={22} color={COLORS.textSecondary} />
-                </Pressable>
+                </ExternalLink>
               ))}
             </View>
           </GlassCard>

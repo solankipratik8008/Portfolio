@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, NAVBAR_HEIGHT } from '../constants/theme';
 import { PERSONAL_INFO } from '../constants/data';
+import ExternalLink from './ExternalLink';
 
 interface HeroSectionProps {
   onViewWork: () => void;
@@ -92,8 +93,8 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             </LinearGradient>
           </Pressable>
 
-          <Pressable
-            onPress={() => Linking.openURL(PERSONAL_INFO.resumeUrl)}
+          <ExternalLink
+            href={PERSONAL_INFO.resumeUrl}
             style={({ hovered }: any) => [
               styles.secondaryButton,
               hovered && styles.secondaryButtonHovered,
@@ -101,7 +102,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
           >
             <Ionicons name="download-outline" size={18} color={COLORS.accentPrimary} />
             <Text style={styles.secondaryButtonText}>Download Resume</Text>
-          </Pressable>
+          </ExternalLink>
         </View>
 
         <View style={styles.socials}>
@@ -110,16 +111,16 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             { icon: 'logo-linkedin' as const, url: PERSONAL_INFO.linkedin },
             { icon: 'mail-outline' as const, url: `mailto:${PERSONAL_INFO.email}` },
           ].map((social) => (
-            <Pressable
+            <ExternalLink
               key={social.icon}
-              onPress={() => Linking.openURL(social.url)}
+              href={social.url}
               style={({ hovered }: any) => [
                 styles.socialIcon,
                 hovered && styles.socialIconHovered,
               ]}
             >
               <Ionicons name={social.icon} size={22} color={COLORS.textSecondary} />
-            </Pressable>
+            </ExternalLink>
           ))}
         </View>
       </Animated.View>

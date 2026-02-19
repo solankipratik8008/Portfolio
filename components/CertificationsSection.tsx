@@ -3,9 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
   useWindowDimensions,
-  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,11 +11,12 @@ import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../consta
 import { CERTIFICATIONS } from '../constants/data';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
+import ExternalLink from './ExternalLink';
 
 function CertCard({ cert }: { cert: (typeof CERTIFICATIONS)[0] }) {
   return (
-    <Pressable
-      onPress={() => Linking.openURL(cert.verifyUrl)}
+    <ExternalLink
+      href={cert.verifyUrl}
       style={({ hovered }: any) => [hovered && { transform: [{ scale: 1.02 }] }]}
     >
       <GlassCard style={styles.card}>
@@ -38,7 +37,7 @@ function CertCard({ cert }: { cert: (typeof CERTIFICATIONS)[0] }) {
           <Ionicons name="open-outline" size={14} color={COLORS.textMuted} />
         </View>
       </GlassCard>
-    </Pressable>
+    </ExternalLink>
   );
 }
 

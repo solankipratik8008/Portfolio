@@ -3,15 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
   useWindowDimensions,
-  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
 import { PROJECTS } from '../constants/data';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
+import ExternalLink from './ExternalLink';
 
 const PROJECT_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   '1': 'shield-checkmark',
@@ -51,8 +50,8 @@ function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
       </View>
 
       <View style={styles.projectLinks}>
-        <Pressable
-          onPress={() => Linking.openURL(project.githubUrl)}
+        <ExternalLink
+          href={project.githubUrl}
           style={({ hovered }: any) => [
             styles.projectLink,
             hovered && styles.projectLinkHovered,
@@ -60,7 +59,7 @@ function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
         >
           <Ionicons name="logo-github" size={18} color={COLORS.textSecondary} />
           <Text style={styles.projectLinkText}>Source Code</Text>
-        </Pressable>
+        </ExternalLink>
       </View>
     </GlassCard>
   );

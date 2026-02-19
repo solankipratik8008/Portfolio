@@ -3,15 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
   useWindowDimensions,
-  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
 import { BUILT_PROJECTS } from '../constants/data';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
+import ExternalLink from './ExternalLink';
 
 function BuiltCard({ project }: { project: (typeof BUILT_PROJECTS)[0] }) {
   return (
@@ -24,15 +23,15 @@ function BuiltCard({ project }: { project: (typeof BUILT_PROJECTS)[0] }) {
             color={project.color}
           />
         </View>
-        <Pressable
-          onPress={() => Linking.openURL(project.githubUrl)}
+        <ExternalLink
+          href={project.githubUrl}
           style={({ hovered }: any) => [
             styles.ghBtn,
             hovered && styles.ghBtnHovered,
           ]}
         >
           <Ionicons name="logo-github" size={18} color={COLORS.textSecondary} />
-        </Pressable>
+        </ExternalLink>
       </View>
 
       <Text style={styles.title}>{project.title}</Text>

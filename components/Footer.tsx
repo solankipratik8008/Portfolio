@@ -9,6 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
 import { PERSONAL_INFO, NAV_LINKS } from '../constants/data';
+import ExternalLink from './ExternalLink';
 
 interface FooterProps {
   onNavPress: (sectionId: string) => void;
@@ -47,16 +48,16 @@ export default function Footer({ onNavPress }: FooterProps) {
             <Text style={styles.colTitle}>Connect</Text>
             <View style={styles.socialRow}>
               {socialLinks.map((social) => (
-                <Pressable
+                <ExternalLink
                   key={social.icon}
-                  onPress={() => Linking.openURL(social.url)}
+                  href={social.url}
                   style={({ hovered }: any) => [
                     styles.socialBtn,
                     hovered && styles.socialBtnHovered,
                   ]}
                 >
                   <Ionicons name={social.icon} size={20} color={COLORS.textSecondary} />
-                </Pressable>
+                </ExternalLink>
               ))}
             </View>
           </View>
