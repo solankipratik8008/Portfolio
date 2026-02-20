@@ -6,7 +6,6 @@ import {
   TextInput,
   Pressable,
   useWindowDimensions,
-  Linking,
   Alert,
   Platform,
 } from 'react-native';
@@ -23,11 +22,39 @@ export default function ContactSection() {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
-    const subject = `Portfolio Contact from ${form.name}`;
-    const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
-    Linking.openURL(`mailto:${personalInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.message) {
+      Alert.alert('Missing fields', 'Please fill in all fields before sending.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: process.env.EXPO_PUBLIC_WEB3FORMS_KEY || '',
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          subject: `Portfolio Contact from ${form.name}`,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+        setForm({ name: '', email: '', message: '' });
+      } else {
+        Alert.alert('Error', 'Failed to send message. Please try again.');
+      }
+    } catch {
+      Alert.alert('Error', 'Network error. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const contactItems = [
@@ -139,23 +166,32 @@ export default function ContactSection() {
               />
             </View>
 
-            <Pressable
-              onPress={handleSubmit}
-              style={({ hovered }: any) => [
-                styles.submitButton,
-                hovered && styles.submitButtonHovered,
-              ]}
-            >
-              <LinearGradient
-                colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.submitGradient}
+            {submitted ? (
+              <View style={styles.successBox}>
+                <Ionicons name="checkmark-circle" size={22} color="#22c55e" />
+                <Text style={styles.successText}>Message sent! I'll get back to you soon.</Text>
+              </View>
+            ) : (
+              <Pressable
+                onPress={handleSubmit}
+                disabled={submitting}
+                style={({ hovered }: any) => [
+                  styles.submitButton,
+                  hovered && styles.submitButtonHovered,
+                  submitting && { opacity: 0.7 },
+                ]}
               >
-                <Ionicons name="send" size={18} color="#fff" />
-                <Text style={styles.submitText}>Send Message</Text>
-              </LinearGradient>
-            </Pressable>
+                <LinearGradient
+                  colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.submitGradient}
+                >
+                  <Ionicons name={submitting ? 'hourglass-outline' : 'send'} size={18} color="#fff" />
+                  <Text style={styles.submitText}>{submitting ? 'Sending...' : 'Send Message'}</Text>
+                </LinearGradient>
+              </Pressable>
+            )}
           </GlassCard>
         </View>
       </View>
@@ -298,5 +334,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: FONT_SIZES.md,
     fontWeight: '600',
+  },
+  successBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(34, 197, 94, 0.3)',
+    borderRadius: BORDER_RADIUS.md,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    marginTop: SPACING.sm,
+  },
+  successText: {
+    color: '#22c55e',
+    fontSize: FONT_SIZES.md,
+    fontWeight: '500',
   },
 });

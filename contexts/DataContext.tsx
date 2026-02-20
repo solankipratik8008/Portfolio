@@ -57,6 +57,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
+    // If Firebase is not configured, use hardcoded data
+    const firebaseConfigured = !!process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
+    if (!firebaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const [
         piData,
@@ -82,18 +89,21 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         getCollectionData<(typeof NAV_LINKS)[0]>('navLinks'),
       ]);
 
+      // Firebase IS configured: always use Firestore result, even if empty.
+      // This ensures deleted items actually disappear instead of falling back
+      // to hardcoded data.
       if (piData) setPersonalInfo(piData);
-      if (statsData.length) setStats(statsData);
-      if (skillsData.length) setSkillCategories(skillsData);
-      if (projData.length) setProjects(projData);
-      if (builtData.length) setBuiltProjects(builtData);
-      if (expData.length) setExperiences(expData);
-      if (eduData.length) setEducation(eduData);
-      if (certData.length) setCertifications(certData);
-      if (testData.length) setTestimonials(testData);
-      if (navData.length) setNavLinks(navData);
+      setStats(statsData.length ? statsData : STATS);
+      setSkillCategories(skillsData.length ? skillsData : SKILL_CATEGORIES);
+      setProjects(projData);
+      setBuiltProjects(builtData);
+      setExperiences(expData);
+      setEducation(eduData);
+      setCertifications(certData);
+      setTestimonials(testData);
+      setNavLinks(navData.length ? navData : NAV_LINKS);
     } catch {
-      // Keep hardcoded fallback data
+      // Network error — keep hardcoded fallback data
     } finally {
       setLoading(false);
     }
