@@ -16,7 +16,6 @@ import BuiltProjectsSection from '../components/BuiltProjectsSection';
 import ExperienceSection from '../components/ExperienceSection';
 import EducationSection from '../components/EducationSection';
 import CertificationsSection from '../components/CertificationsSection';
-import TestimonialsSection from '../components/TestimonialsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
@@ -87,10 +86,6 @@ export default function Portfolio() {
 
         <View onLayout={handleLayout('certifications')}>
           <CertificationsSection />
-        </View>
-
-        <View onLayout={handleLayout('testimonials')}>
-          <TestimonialsSection />
         </View>
 
         <View onLayout={handleLayout('contact')}>
