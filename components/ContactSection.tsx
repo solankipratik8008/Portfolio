@@ -32,26 +32,19 @@ export default function ContactSection() {
     }
     setSubmitting(true);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: process.env.EXPO_PUBLIC_WEB3FORMS_KEY || '',
-          name: form.name,
-          email: form.email,
-          message: form.message,
-          subject: `Portfolio Contact from ${form.name}`,
-        }),
+      const { addDocument } = await import('../services/firestoreService');
+      await addDocument('messages', {
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        read: false,
+        createdAt: new Date().toISOString(),
+        order: Date.now(),
       });
-      const data = await res.json();
-      if (data.success) {
-        setSubmitted(true);
-        setForm({ name: '', email: '', message: '' });
-      } else {
-        Alert.alert('Error', 'Failed to send message. Please try again.');
-      }
+      setSubmitted(true);
+      setForm({ name: '', email: '', message: '' });
     } catch {
-      Alert.alert('Error', 'Network error. Please try again.');
+      Alert.alert('Error', 'Failed to send message. Please try again.');
     } finally {
       setSubmitting(false);
     }
