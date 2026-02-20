@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
-import { PROJECTS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
@@ -20,7 +20,7 @@ const PROJECT_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   '5': 'eye',
 };
 
-function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
+function ProjectCard({ project }: { project: any }) {
   return (
     <GlassCard glow style={styles.projectCard}>
       <View style={[styles.projectImage, { backgroundColor: `${project.color}20` }]}>
@@ -66,6 +66,7 @@ function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
 }
 
 export default function ProjectsSection() {
+  const { projects } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1024;
@@ -78,7 +79,7 @@ export default function ProjectsSection() {
       />
 
       <View style={[styles.grid, isMobile && styles.gridMobile]}>
-        {PROJECTS.map((project) => (
+        {projects.map((project) => (
           <View
             key={project.id}
             style={[

@@ -8,12 +8,12 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
-import { CERTIFICATIONS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
 
-function CertCard({ cert }: { cert: (typeof CERTIFICATIONS)[0] }) {
+function CertCard({ cert }: { cert: any }) {
   return (
     <ExternalLink
       href={cert.verifyUrl}
@@ -42,6 +42,7 @@ function CertCard({ cert }: { cert: (typeof CERTIFICATIONS)[0] }) {
 }
 
 export default function CertificationsSection() {
+  const { certifications } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -53,7 +54,7 @@ export default function CertificationsSection() {
       />
 
       <View style={[styles.grid, isMobile && styles.gridMobile]}>
-        {CERTIFICATIONS.map((cert) => (
+        {certifications.map((cert) => (
           <View
             key={cert.id}
             style={[styles.cardWrapper, isMobile && styles.cardWrapperMobile]}

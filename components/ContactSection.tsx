@@ -13,12 +13,13 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
-import { PERSONAL_INFO } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
 
 export default function ContactSection() {
+  const { personalInfo } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -26,18 +27,18 @@ export default function ContactSection() {
   const handleSubmit = () => {
     const subject = `Portfolio Contact from ${form.name}`;
     const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
-    Linking.openURL(`mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    Linking.openURL(`mailto:${personalInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
   };
 
   const contactItems = [
-    { icon: 'mail-outline' as const, label: 'Email', value: PERSONAL_INFO.email, url: `mailto:${PERSONAL_INFO.email}` },
-    { icon: 'call-outline' as const, label: 'Phone', value: PERSONAL_INFO.phone, url: `tel:${PERSONAL_INFO.phone}` },
-    { icon: 'location-outline' as const, label: 'Location', value: PERSONAL_INFO.location, url: undefined },
+    { icon: 'mail-outline' as const, label: 'Email', value: personalInfo.email, url: `mailto:${personalInfo.email}` },
+    { icon: 'call-outline' as const, label: 'Phone', value: personalInfo.phone, url: `tel:${personalInfo.phone}` },
+    { icon: 'location-outline' as const, label: 'Location', value: personalInfo.location, url: undefined },
   ];
 
   const socialLinks = [
-    { icon: 'logo-github' as const, url: PERSONAL_INFO.github, label: 'GitHub' },
-    { icon: 'logo-linkedin' as const, url: PERSONAL_INFO.linkedin, label: 'LinkedIn' },
+    { icon: 'logo-github' as const, url: personalInfo.github, label: 'GitHub' },
+    { icon: 'logo-linkedin' as const, url: personalInfo.linkedin, label: 'LinkedIn' },
   ];
 
   return (

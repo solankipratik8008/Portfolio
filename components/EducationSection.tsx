@@ -6,17 +6,19 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { EDUCATION } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
 export default function EducationSection() {
+  const { education } = useData();
+
   return (
     <View style={styles.container}>
       <SectionTitle title="Education" subtitle="My academic background" />
 
       <View style={styles.cards}>
-        {EDUCATION.map((edu) => (
+        {education.map((edu) => (
           <GlassCard key={edu.id} style={styles.card}>
             <View style={styles.iconWrap}>
               <Ionicons name="school-outline" size={28} color={COLORS.accentPrimary} />

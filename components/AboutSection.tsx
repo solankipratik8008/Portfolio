@@ -8,11 +8,12 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { PERSONAL_INFO, STATS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
 export default function AboutSection() {
+  const { personalInfo, stats } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -31,23 +32,23 @@ export default function AboutSection() {
         </View>
 
         <View style={[styles.textContent, isMobile && styles.textContentMobile]}>
-          <Text style={styles.bio}>{PERSONAL_INFO.bio}</Text>
+          <Text style={styles.bio}>{personalInfo.bio}</Text>
 
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
               <Ionicons name="location-outline" size={18} color={COLORS.accentPrimary} />
-              <Text style={styles.infoText}>{PERSONAL_INFO.location}</Text>
+              <Text style={styles.infoText}>{personalInfo.location}</Text>
             </View>
             <View style={styles.infoItem}>
               <Ionicons name="mail-outline" size={18} color={COLORS.accentPrimary} />
-              <Text style={styles.infoText}>{PERSONAL_INFO.email}</Text>
+              <Text style={styles.infoText}>{personalInfo.email}</Text>
             </View>
           </View>
         </View>
       </View>
 
       <View style={[styles.statsRow, isMobile && styles.statsRowMobile]}>
-        {STATS.map((stat) => (
+        {stats.map((stat) => (
           <GlassCard key={stat.label} style={[styles.statCard, isMobile && styles.statCardMobile]}>
             <Text style={styles.statValue}>{stat.value}</Text>
             <Text style={styles.statLabel}>{stat.label}</Text>

@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, NAVBAR_HEIGHT } from '../constants/theme';
-import { PERSONAL_INFO } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import ExternalLink from './ExternalLink';
 
 interface HeroSectionProps {
@@ -20,6 +20,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onViewWork }: HeroSectionProps) {
+  const { personalInfo } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -58,7 +59,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
       >
         <Text style={styles.greeting}>Hello, I'm</Text>
         <Text style={[styles.name, isMobile && styles.nameMobile]}>
-          {PERSONAL_INFO.name}
+          {personalInfo.name}
         </Text>
         <View style={styles.roleContainer}>
           <LinearGradient
@@ -67,11 +68,11 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             end={{ x: 1, y: 0 }}
             style={styles.roleBadge}
           >
-            <Text style={styles.roleText}>{PERSONAL_INFO.role}</Text>
+            <Text style={styles.roleText}>{personalInfo.role}</Text>
           </LinearGradient>
         </View>
         <Text style={[styles.tagline, isMobile && styles.taglineMobile]}>
-          {PERSONAL_INFO.tagline}
+          {personalInfo.tagline}
         </Text>
 
         <View style={[styles.buttons, isMobile && styles.buttonsMobile]}>
@@ -94,7 +95,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
           </Pressable>
 
           <ExternalLink
-            href={PERSONAL_INFO.resumeUrl}
+            href={personalInfo.resumeUrl}
             style={({ hovered }: any) => [
               styles.secondaryButton,
               hovered && styles.secondaryButtonHovered,
@@ -107,9 +108,9 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
 
         <View style={styles.socials}>
           {[
-            { icon: 'logo-github' as const, url: PERSONAL_INFO.github },
-            { icon: 'logo-linkedin' as const, url: PERSONAL_INFO.linkedin },
-            { icon: 'mail-outline' as const, url: `mailto:${PERSONAL_INFO.email}` },
+            { icon: 'logo-github' as const, url: personalInfo.github },
+            { icon: 'logo-linkedin' as const, url: personalInfo.linkedin },
+            { icon: 'mail-outline' as const, url: `mailto:${personalInfo.email}` },
           ].map((social) => (
             <ExternalLink
               key={social.icon}

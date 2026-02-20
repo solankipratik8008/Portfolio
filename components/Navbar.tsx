@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, NAVBAR_HEIGHT, MAX_WIDTH } from '../constants/theme';
-import { NAV_LINKS, PERSONAL_INFO } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 
 interface NavbarProps {
   onNavPress: (sectionId: string) => void;
 }
 
 export default function Navbar({ onNavPress }: NavbarProps) {
+  const { navLinks, personalInfo } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function Navbar({ onNavPress }: NavbarProps) {
           <Pressable onPress={() => handlePress('hero')}>
             <Text style={styles.logo}>
               {'< '}
-              <Text style={styles.logoAccent}>{PERSONAL_INFO.name.split(' ')[0]}</Text>
+              <Text style={styles.logoAccent}>{personalInfo.name.split(' ')[0]}</Text>
               {' />'}
             </Text>
           </Pressable>
@@ -50,7 +51,7 @@ export default function Navbar({ onNavPress }: NavbarProps) {
             </Pressable>
           ) : (
             <View style={styles.links}>
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Pressable
                   key={link.sectionId}
                   onPress={() => handlePress(link.sectionId)}
@@ -69,7 +70,7 @@ export default function Navbar({ onNavPress }: NavbarProps) {
 
       {isMobile && menuOpen && (
         <View style={styles.mobileMenu}>
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <Pressable
               key={link.sectionId}
               onPress={() => handlePress(link.sectionId)}

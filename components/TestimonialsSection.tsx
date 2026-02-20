@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { TESTIMONIALS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
-function TestimonialCard({ item }: { item: (typeof TESTIMONIALS)[0] }) {
+function TestimonialCard({ item }: { item: any }) {
   return (
     <GlassCard style={styles.card}>
       <Ionicons
@@ -38,6 +38,7 @@ function TestimonialCard({ item }: { item: (typeof TESTIMONIALS)[0] }) {
 }
 
 export default function TestimonialsSection() {
+  const { testimonials } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -53,7 +54,7 @@ export default function TestimonialsSection() {
           decelerationRate="fast"
           snapToInterval={320}
         >
-          {TESTIMONIALS.map((item) => (
+          {testimonials.map((item) => (
             <View key={item.id} style={styles.scrollCard}>
               <TestimonialCard item={item} />
             </View>
@@ -61,7 +62,7 @@ export default function TestimonialsSection() {
         </ScrollView>
       ) : (
         <View style={styles.grid}>
-          {TESTIMONIALS.map((item) => (
+          {testimonials.map((item) => (
             <TestimonialCard key={item.id} item={item} />
           ))}
         </View>

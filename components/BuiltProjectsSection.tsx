@@ -7,12 +7,12 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, BORDER_RADIUS } from '../constants/theme';
-import { BUILT_PROJECTS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
 
-function BuiltCard({ project }: { project: (typeof BUILT_PROJECTS)[0] }) {
+function BuiltCard({ project }: { project: any }) {
   return (
     <GlassCard style={styles.card}>
       <View style={styles.cardHeader}>
@@ -49,6 +49,7 @@ function BuiltCard({ project }: { project: (typeof BUILT_PROJECTS)[0] }) {
 }
 
 export default function BuiltProjectsSection() {
+  const { builtProjects } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1024;
@@ -61,7 +62,7 @@ export default function BuiltProjectsSection() {
       />
 
       <View style={[styles.grid, isMobile && styles.gridMobile]}>
-        {BUILT_PROJECTS.map((project) => (
+        {builtProjects.map((project) => (
           <View
             key={project.id}
             style={[

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { SKILL_CATEGORIES } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
@@ -50,6 +50,7 @@ function SkillBar({ name, level }: { name: string; level: number }) {
 }
 
 export default function SkillsSection() {
+  const { skillCategories } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -58,7 +59,7 @@ export default function SkillsSection() {
       <SectionTitle title="Skills" subtitle="Technologies I work with" />
 
       <View style={[styles.grid, isMobile && styles.gridMobile]}>
-        {SKILL_CATEGORIES.map((category) => (
+        {skillCategories.map((category) => (
           <GlassCard key={category.title} style={[styles.categoryCard, isMobile && styles.categoryCardMobile]}>
             <Text style={styles.categoryTitle}>{category.title}</Text>
             {category.skills.map((skill) => (

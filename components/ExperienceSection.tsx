@@ -6,11 +6,11 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { EXPERIENCES } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
-function TimelineItem({ item, isLast }: { item: (typeof EXPERIENCES)[0]; isLast: boolean }) {
+function TimelineItem({ item, isLast }: { item: any; isLast: boolean }) {
   return (
     <View style={styles.timelineItem}>
       <View style={styles.timelineLine}>
@@ -33,6 +33,7 @@ function TimelineItem({ item, isLast }: { item: (typeof EXPERIENCES)[0]; isLast:
 }
 
 export default function ExperienceSection() {
+  const { experiences } = useData();
   const { width } = useWindowDimensions();
 
   return (
@@ -40,11 +41,11 @@ export default function ExperienceSection() {
       <SectionTitle title="Experience" subtitle="My professional journey" />
 
       <View style={styles.timeline}>
-        {EXPERIENCES.map((exp, index) => (
+        {experiences.map((exp, index) => (
           <TimelineItem
             key={exp.id}
             item={exp}
-            isLast={index === EXPERIENCES.length - 1}
+            isLast={index === experiences.length - 1}
           />
         ))}
       </View>

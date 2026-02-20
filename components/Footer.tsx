@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
-import { PERSONAL_INFO, NAV_LINKS } from '../constants/data';
+import { useData } from '../contexts/DataContext';
 import ExternalLink from './ExternalLink';
 
 interface FooterProps {
@@ -16,10 +16,11 @@ interface FooterProps {
 }
 
 export default function Footer({ onNavPress }: FooterProps) {
+  const { personalInfo, navLinks } = useData();
   const socialLinks = [
-    { icon: 'logo-github' as const, url: PERSONAL_INFO.github },
-    { icon: 'logo-linkedin' as const, url: PERSONAL_INFO.linkedin },
-    { icon: 'mail-outline' as const, url: `mailto:${PERSONAL_INFO.email}` },
+    { icon: 'logo-github' as const, url: personalInfo.github },
+    { icon: 'logo-linkedin' as const, url: personalInfo.linkedin },
+    { icon: 'mail-outline' as const, url: `mailto:${personalInfo.email}` },
   ];
 
   return (
@@ -29,15 +30,15 @@ export default function Footer({ onNavPress }: FooterProps) {
           <View style={styles.brandCol}>
             <Text style={styles.logo}>
               {'< '}
-              <Text style={styles.logoAccent}>{PERSONAL_INFO.name.split(' ')[0]}</Text>
+              <Text style={styles.logoAccent}>{personalInfo.name.split(' ')[0]}</Text>
               {' />'}
             </Text>
-            <Text style={styles.tagline}>{PERSONAL_INFO.tagline}</Text>
+            <Text style={styles.tagline}>{personalInfo.tagline}</Text>
           </View>
 
           <View style={styles.linksCol}>
             <Text style={styles.colTitle}>Quick Links</Text>
-            {NAV_LINKS.slice(0, 5).map((link) => (
+            {navLinks.slice(0, 5).map((link) => (
               <Pressable key={link.sectionId} onPress={() => onNavPress(link.sectionId)}>
                 <Text style={styles.footerLink}>{link.label}</Text>
               </Pressable>
@@ -66,7 +67,7 @@ export default function Footer({ onNavPress }: FooterProps) {
         <View style={styles.divider} />
 
         <Text style={styles.copyright}>
-          {'\u00A9'} {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
+          {'\u00A9'} {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
         </Text>
       </View>
     </View>

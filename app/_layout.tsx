@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { AuthProvider } from '../contexts/AuthContext';
+import { DataProvider } from '../contexts/DataContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,9 +25,11 @@ export default function RootLayout() {
   }
 
   return (
-    <>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false }} onLayout={onLayoutRootView as any} />
-    </>
+    <AuthProvider>
+      <DataProvider>
+        <StatusBar style="light" />
+        <Stack screenOptions={{ headerShown: false }} onLayout={onLayoutRootView as any} />
+      </DataProvider>
+    </AuthProvider>
   );
 }
