@@ -15,6 +15,7 @@ const MENU_ITEMS = [
   { label: 'Education', icon: 'school-outline', path: '/admin/education' },
   { label: 'Certifications', icon: 'ribbon-outline', path: '/admin/certifications' },
   { label: 'Testimonials', icon: 'chatbubble-outline', path: '/admin/testimonials' },
+  { label: 'Nav Links', icon: 'menu-outline', path: '/admin/nav-links' },
 ] as const;
 
 export default function AdminSidebar() {
