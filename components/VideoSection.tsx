@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, useWindowDimensions, Platform } from 'react-native';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
 import { useData } from '../contexts/DataContext';
-import { getEmbedUrl } from '../utils/videoUtils';
+import { getEmbedUrl, isYouTubeShort } from '../utils/videoUtils';
 import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
@@ -20,10 +20,11 @@ export default function VideoSection() {
         {videos.map((video: any) => {
           const embedUrl = getEmbedUrl(video.url);
           if (!embedUrl) return null;
+          const isShort = isYouTubeShort(video.url);
           return (
-            <View key={video.id} style={[styles.videoCard, isMobile && styles.videoCardMobile]}>
+            <View key={video.id} style={[styles.videoCard, isMobile && styles.videoCardMobile, isShort && styles.videoCardShort]}>
               <GlassCard style={styles.card}>
-                <View style={styles.iframeContainer}>
+                <View style={[styles.iframeContainer, isShort && styles.iframeContainerShort]}>
                   {Platform.OS === 'web' ? (
                     <iframe
                       src={embedUrl}
@@ -75,6 +76,10 @@ const styles = StyleSheet.create({
   videoCardMobile: {
     minWidth: '100%' as any,
   },
+  videoCardShort: {
+    flex: 0,
+    width: 280,
+  },
   card: {
     padding: SPACING.md,
   },
@@ -86,6 +91,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     marginBottom: SPACING.md,
   } as any,
+  iframeContainerShort: {
+    aspectRatio: 9 / 16,
+  },
   videoTitle: {
     fontSize: FONT_SIZES.lg,
     fontWeight: '700',
