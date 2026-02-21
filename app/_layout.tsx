@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { AuthProvider } from '../contexts/AuthContext';
 import { DataProvider } from '../contexts/DataContext';
+import { ThemeProvider } from '../contexts/ThemeContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,10 +27,12 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <DataProvider>
-        <StatusBar style="light" />
-        <Stack screenOptions={{ headerShown: false }} onLayout={onLayoutRootView as any} />
-      </DataProvider>
+      <ThemeProvider>
+        <DataProvider>
+          <StatusBar style="auto" />
+          <Stack screenOptions={{ headerShown: false }} onLayout={onLayoutRootView as any} />
+        </DataProvider>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

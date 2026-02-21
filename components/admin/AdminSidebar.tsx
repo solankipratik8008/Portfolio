@@ -16,6 +16,9 @@ const MENU_ITEMS = [
   { label: 'Certifications', icon: 'ribbon-outline', path: '/admin/certifications' },
   { label: 'Testimonials', icon: 'chatbubble-outline', path: '/admin/testimonials' },
   { label: 'Nav Links', icon: 'menu-outline', path: '/admin/nav-links' },
+  { label: 'Videos', icon: 'play-circle-outline', path: '/admin/videos' },
+  { label: 'Content Blocks', icon: 'albums-outline', path: '/admin/content-blocks' },
+  { label: 'Theme', icon: 'color-palette-outline', path: '/admin/theme' },
   { label: 'Messages', icon: 'mail-outline', path: '/admin/messages' },
 ] as const;
 

@@ -10,7 +10,8 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import { getFirebaseDb } from '../config/firebase';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { getFirebaseDb, getFirebaseStorage } from '../config/firebase';
 
 export async function getCollectionData<T>(
   collectionName: string,
@@ -47,8 +48,8 @@ export async function addDocument<T extends Record<string, any>>(
 ): Promise<string> {
   const db = getFirebaseDb();
   if (!db) throw new Error('Firebase not initialized');
-  const ref = await addDoc(collection(db, collectionName), data);
-  return ref.id;
+  const docRef = await addDoc(collection(db, collectionName), data);
+  return docRef.id;
 }
 
 export async function updateDocument<T extends Record<string, any>>(
@@ -78,4 +79,19 @@ export async function setDocument<T extends Record<string, any>>(
   const db = getFirebaseDb();
   if (!db) throw new Error('Firebase not initialized');
   await setDoc(doc(db, collectionName, docId), data);
+}
+
+export async function uploadFile(path: string, file: File): Promise<string> {
+  const storage = getFirebaseStorage();
+  if (!storage) throw new Error('Firebase Storage not initialized');
+  const storageRef = ref(storage, path);
+  await uploadBytes(storageRef, file);
+  return await getDownloadURL(storageRef);
+}
+
+export async function deleteFile(storagePath: string): Promise<void> {
+  const storage = getFirebaseStorage();
+  if (!storage) throw new Error('Firebase Storage not initialized');
+  const storageRef = ref(storage, storagePath);
+  await deleteObject(storageRef);
 }

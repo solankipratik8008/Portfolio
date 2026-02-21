@@ -13,6 +13,26 @@ import {
   NAV_LINKS,
 } from '../constants/data';
 
+export interface VideoItem {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  order: number;
+}
+
+export interface ContentBlock {
+  id: string;
+  type: 'text' | 'image' | 'video' | 'links';
+  title?: string;
+  content?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  links?: { label: string; url: string }[];
+  order: number;
+  visible?: boolean;
+}
+
 interface DataContextType {
   personalInfo: typeof PERSONAL_INFO;
   stats: typeof STATS;
@@ -24,6 +44,8 @@ interface DataContextType {
   certifications: typeof CERTIFICATIONS;
   testimonials: typeof TESTIMONIALS;
   navLinks: typeof NAV_LINKS;
+  videos: VideoItem[];
+  contentBlocks: ContentBlock[];
   loading: boolean;
   refetch: () => void;
 }
@@ -39,6 +61,8 @@ const DataContext = createContext<DataContextType>({
   certifications: CERTIFICATIONS,
   testimonials: TESTIMONIALS,
   navLinks: NAV_LINKS,
+  videos: [],
+  contentBlocks: [],
   loading: true,
   refetch: () => {},
 });
@@ -54,10 +78,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [certifications, setCertifications] = useState(CERTIFICATIONS);
   const [testimonials, setTestimonials] = useState(TESTIMONIALS);
   const [navLinks, setNavLinks] = useState(NAV_LINKS);
+  const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    // If Firebase is not configured, use hardcoded data
     const firebaseConfigured = !!process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
     if (!firebaseConfigured) {
       setLoading(false);
@@ -76,6 +101,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         certData,
         testData,
         navData,
+        videosData,
+        blocksData,
       ] = await Promise.all([
         getDocumentData<typeof PERSONAL_INFO>('personalInfo', 'main'),
         getCollectionData<(typeof STATS)[0]>('stats'),
@@ -87,12 +114,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         getCollectionData<(typeof CERTIFICATIONS)[0]>('certifications'),
         getCollectionData<(typeof TESTIMONIALS)[0]>('testimonials'),
         getCollectionData<(typeof NAV_LINKS)[0]>('navLinks'),
+        getCollectionData<VideoItem>('videos'),
+        getCollectionData<ContentBlock>('contentBlocks'),
       ]);
 
-      // Firebase IS configured: always use Firestore result, even if empty.
-      // This ensures deleted items actually disappear instead of falling back
-      // to hardcoded data.
-      if (piData) setPersonalInfo(piData);
+      if (piData) setPersonalInfo(piData as any);
       setStats(statsData.length ? statsData : STATS);
       setSkillCategories(skillsData.length ? skillsData : SKILL_CATEGORIES);
       setProjects(projData);
@@ -102,6 +128,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       setCertifications(certData);
       setTestimonials(testData);
       setNavLinks(navData.length ? navData : NAV_LINKS);
+      setVideos(videosData);
+      setContentBlocks(blocksData);
     } catch {
       // Network error — keep hardcoded fallback data
     } finally {
@@ -126,6 +154,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         certifications,
         testimonials,
         navLinks,
+        videos,
+        contentBlocks,
         loading,
         refetch: fetchData,
       }}

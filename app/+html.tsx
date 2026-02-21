@@ -14,7 +14,6 @@ export default function Root({ children }: { children: React.ReactNode }) {
 
         <ScrollViewStyleReset />
 
-        {/* Preload Ionicons font so icons render immediately (fixes blank rectangles) */}
         <link
           rel="preload"
           href="https://unpkg.com/@expo/vector-icons@15.0.3/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf"
@@ -26,7 +25,20 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
-              body { background-color: #0a0118; margin: 0; overflow-x: hidden; }
+              :root {
+                --bg: #0a0118;
+                --bg-secondary: #1a0a2e;
+                --accent-primary: #7C3AED;
+                --accent-secondary: #2563EB;
+                --glass-bg: rgba(255,255,255,0.08);
+                --glass-border: rgba(255,255,255,0.15);
+                --glass-highlight: rgba(255,255,255,0.12);
+                --text-primary: #FFFFFF;
+                --text-secondary: rgba(255,255,255,0.7);
+                --text-muted: rgba(255,255,255,0.5);
+                --navbar-bg: rgba(10,1,24,0.85);
+              }
+              body { background-color: var(--bg); margin: 0; overflow-x: hidden; }
               @font-face {
                 font-family: 'Ionicons';
                 src: url('https://unpkg.com/@expo/vector-icons@15.0.3/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf') format('truetype');

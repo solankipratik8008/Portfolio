@@ -3,16 +3,17 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   Pressable,
   Animated,
   useWindowDimensions,
   Platform,
-  Linking,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, NAVBAR_HEIGHT } from '../constants/theme';
+import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH, NAVBAR_HEIGHT, SHADOWS } from '../constants/theme';
 import { useData } from '../contexts/DataContext';
+import { useTheme } from '../contexts/ThemeContext';
 import ExternalLink from './ExternalLink';
 
 interface HeroSectionProps {
@@ -21,6 +22,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onViewWork }: HeroSectionProps) {
   const { personalInfo } = useData();
+  const { currentPreset } = useTheme();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -41,11 +43,14 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
     ]).start();
   }, []);
 
+  const hasResume = !!(personalInfo as any).resumeUrl && (personalInfo as any).resumeUrl !== '#';
+  const hasPhoto = !!(personalInfo as any).photoUrl;
+
   return (
     <View style={styles.container}>
       {/* Decorative gradient orbs */}
-      <View style={[styles.orb, styles.orb1]} />
-      <View style={[styles.orb, styles.orb2]} />
+      <View style={[styles.orb, styles.orb1, { backgroundColor: currentPreset.primary }]} />
+      <View style={[styles.orb, styles.orb2, { backgroundColor: currentPreset.secondary }]} />
 
       <Animated.View
         style={[
@@ -57,13 +62,24 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
           },
         ]}
       >
+        {/* Profile photo */}
+        {hasPhoto && (
+          <View style={[styles.avatarContainer, { borderColor: currentPreset.primary }]}>
+            <Image
+              source={{ uri: (personalInfo as any).photoUrl }}
+              style={styles.avatar}
+              resizeMode="cover"
+            />
+          </View>
+        )}
+
         <Text style={styles.greeting}>Hello, I'm</Text>
         <Text style={[styles.name, isMobile && styles.nameMobile]}>
           {personalInfo.name}
         </Text>
         <View style={styles.roleContainer}>
           <LinearGradient
-            colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
+            colors={[currentPreset.primary, currentPreset.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.roleBadge}
@@ -84,7 +100,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             ]}
           >
             <LinearGradient
-              colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
+              colors={[currentPreset.primary, currentPreset.secondary]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.gradientButton}
@@ -94,16 +110,20 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             </LinearGradient>
           </Pressable>
 
-          <ExternalLink
-            href={personalInfo.resumeUrl}
-            style={({ hovered }: any) => [
-              styles.secondaryButton,
-              hovered && styles.secondaryButtonHovered,
-            ]}
-          >
-            <Ionicons name="download-outline" size={18} color={COLORS.accentPrimary} />
-            <Text style={styles.secondaryButtonText}>Download Resume</Text>
-          </ExternalLink>
+          {hasResume && (
+            <ExternalLink
+              href={(personalInfo as any).resumeUrl}
+              style={({ hovered }: any) => [
+                styles.secondaryButton,
+                hovered && styles.secondaryButtonHovered,
+              ]}
+            >
+              <Ionicons name="download-outline" size={18} color={currentPreset.primary} />
+              <Text style={[styles.secondaryButtonText, { color: currentPreset.primary }]}>
+                Download Resume
+              </Text>
+            </ExternalLink>
+          )}
         </View>
 
         <View style={styles.socials}>
@@ -146,14 +166,12 @@ const styles = StyleSheet.create({
   orb1: {
     width: 400,
     height: 400,
-    backgroundColor: COLORS.accentPrimary,
     top: -100,
     right: -100,
   },
   orb2: {
     width: 300,
     height: 300,
-    backgroundColor: COLORS.accentSecondary,
     bottom: -50,
     left: -80,
   },
@@ -161,6 +179,19 @@ const styles = StyleSheet.create({
     maxWidth: MAX_WIDTH,
     width: '100%',
     alignItems: 'center',
+  },
+  avatarContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    overflow: 'hidden',
+    marginBottom: SPACING.lg,
+    ...SHADOWS.glow,
+  },
+  avatar: {
+    width: 120,
+    height: 120,
   },
   greeting: {
     fontSize: FONT_SIZES.lg,
@@ -252,7 +283,6 @@ const styles = StyleSheet.create({
     transform: [{ scale: 1.02 }],
   },
   secondaryButtonText: {
-    color: COLORS.accentPrimary,
     fontSize: FONT_SIZES.md,
     fontWeight: '600',
   },

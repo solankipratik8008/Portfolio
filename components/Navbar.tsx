@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, NAVBAR_HEIGHT, MAX_WIDTH } from '../constants/theme';
 import { useData } from '../contexts/DataContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface NavbarProps {
   onNavPress: (sectionId: string) => void;
@@ -17,6 +18,7 @@ interface NavbarProps {
 
 export default function Navbar({ onNavPress }: NavbarProps) {
   const { navLinks, personalInfo } = useData();
+  const { isDark, toggleDark } = useTheme();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,7 +30,7 @@ export default function Navbar({ onNavPress }: NavbarProps) {
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: 'var(--navbar-bg)' as any }]}>
         <View style={styles.inner}>
           <Pressable onPress={() => handlePress('hero')}>
             <Text style={styles.logo}>
@@ -39,16 +41,25 @@ export default function Navbar({ onNavPress }: NavbarProps) {
           </Pressable>
 
           {isMobile ? (
-            <Pressable
-              onPress={() => setMenuOpen(!menuOpen)}
-              style={styles.hamburger}
-            >
-              <Ionicons
-                name={menuOpen ? 'close' : 'menu'}
-                size={28}
-                color={COLORS.textPrimary}
-              />
-            </Pressable>
+            <View style={styles.mobileRight}>
+              <Pressable onPress={toggleDark} style={styles.themeToggle}>
+                <Ionicons
+                  name={isDark ? 'sunny-outline' : 'moon-outline'}
+                  size={20}
+                  color={COLORS.textSecondary}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => setMenuOpen(!menuOpen)}
+                style={styles.hamburger}
+              >
+                <Ionicons
+                  name={menuOpen ? 'close' : 'menu'}
+                  size={28}
+                  color={COLORS.textPrimary}
+                />
+              </Pressable>
+            </View>
           ) : (
             <View style={styles.links}>
               {navLinks.map((link) => (
@@ -63,13 +74,23 @@ export default function Navbar({ onNavPress }: NavbarProps) {
                   <Text style={styles.linkText}>{link.label}</Text>
                 </Pressable>
               ))}
+              <Pressable
+                onPress={toggleDark}
+                style={({ hovered }: any) => [styles.themeToggle, hovered && styles.linkHovered]}
+              >
+                <Ionicons
+                  name={isDark ? 'sunny-outline' : 'moon-outline'}
+                  size={20}
+                  color={COLORS.textSecondary}
+                />
+              </Pressable>
             </View>
           )}
         </View>
       </View>
 
       {isMobile && menuOpen && (
-        <View style={styles.mobileMenu}>
+        <View style={[styles.mobileMenu, { backgroundColor: 'var(--navbar-bg)' as any }]}>
           {navLinks.map((link) => (
             <Pressable
               key={link.sectionId}
@@ -96,7 +117,6 @@ const styles = StyleSheet.create({
   } as any,
   container: {
     height: NAVBAR_HEIGHT,
-    backgroundColor: 'rgba(10, 1, 24, 0.85)',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.glassBorder,
     justifyContent: 'center',
@@ -140,11 +160,22 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     fontWeight: '500',
   },
+  themeToggle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: SPACING.xs,
+  },
+  mobileRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   hamburger: {
     padding: SPACING.sm,
   },
   mobileMenu: {
-    backgroundColor: 'rgba(10, 1, 24, 0.98)',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.glassBorder,
     paddingVertical: SPACING.md,

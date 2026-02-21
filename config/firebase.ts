@@ -1,6 +1,7 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { Platform } from 'react-native';
 
 const firebaseConfig = {
@@ -15,6 +16,7 @@ const firebaseConfig = {
 let app: FirebaseApp | null = null;
 let _auth: Auth | null = null;
 let _db: Firestore | null = null;
+let _storage: FirebaseStorage | null = null;
 
 function isConfigValid(): boolean {
   return !!(firebaseConfig.apiKey && firebaseConfig.projectId);
@@ -45,4 +47,14 @@ export function getFirebaseDb(): Firestore | null {
     }
   }
   return _db;
+}
+
+export function getFirebaseStorage(): FirebaseStorage | null {
+  if (!_storage) {
+    const firebaseApp = getApp();
+    if (firebaseApp) {
+      _storage = getStorage(firebaseApp);
+    }
+  }
+  return _storage;
 }

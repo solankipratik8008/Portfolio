@@ -9,6 +9,7 @@ export const PERSONAL_INFO = {
   github: 'https://github.com/solankipratik8008',
   linkedin: 'https://bit.ly/4mRiZLH',
   resumeUrl: '#',
+  photoUrl: '',
 };
 
 export const STATS = [

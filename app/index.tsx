@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, NAVBAR_HEIGHT } from '../constants/theme';
@@ -16,6 +15,8 @@ import BuiltProjectsSection from '../components/BuiltProjectsSection';
 import ExperienceSection from '../components/ExperienceSection';
 import EducationSection from '../components/EducationSection';
 import CertificationsSection from '../components/CertificationsSection';
+import VideoSection from '../components/VideoSection';
+import ContentBlocksSection from '../components/ContentBlocksSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
@@ -86,6 +87,14 @@ export default function Portfolio() {
 
         <View onLayout={handleLayout('certifications')}>
           <CertificationsSection />
+        </View>
+
+        <View onLayout={handleLayout('videos')}>
+          <VideoSection />
+        </View>
+
+        <View>
+          <ContentBlocksSection />
         </View>
 
         <View onLayout={handleLayout('contact')}>
