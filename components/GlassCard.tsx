@@ -10,7 +10,7 @@ interface GlassCardProps {
 
 export default function GlassCard({ children, style, glow }: GlassCardProps) {
   return (
-    <View style={[styles.card, glow && SHADOWS.glow, style]}>
+    <View style={[styles.card, glow && styles.cardGlow, style]}>
       {children}
     </View>
   );
@@ -22,7 +22,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.glassBorder,
     borderRadius: BORDER_RADIUS.lg,
-    padding: 24,
+    padding: 20,
     ...SHADOWS.glass,
+  },
+  cardGlow: {
+    borderColor: 'rgba(59, 130, 246, 0.3)',
+    ...SHADOWS.glow,
   },
 });

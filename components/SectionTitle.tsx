@@ -20,26 +20,28 @@ export default function SectionTitle({ title, subtitle }: SectionTitleProps) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginBottom: SPACING.xxl,
+    marginBottom: SPACING.xl,
   },
   title: {
-    fontSize: FONT_SIZES.xxxl,
+    fontSize: FONT_SIZES.xxl,
     fontWeight: '700',
     color: COLORS.textPrimary,
     textAlign: 'center',
+    letterSpacing: -0.3,
   },
   underline: {
-    width: 60,
+    width: 40,
     height: 3,
     backgroundColor: COLORS.accentPrimary,
     marginTop: SPACING.sm,
     borderRadius: 2,
   },
   subtitle: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.textSecondary,
-    marginTop: SPACING.md,
+    marginTop: SPACING.sm,
     textAlign: 'center',
     maxWidth: 500,
+    lineHeight: 20,
   },
 });

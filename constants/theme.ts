@@ -1,16 +1,16 @@
 export const COLORS = {
-  background: '#0a0118',
-  backgroundSecondary: '#1a0a2e',
-  glassBg: 'rgba(255, 255, 255, 0.08)',
-  glassBorder: 'rgba(255, 255, 255, 0.15)',
-  glassHighlight: 'rgba(255, 255, 255, 0.12)',
-  accentPrimary: '#7C3AED',
-  accentSecondary: '#2563EB',
-  accentGradient: ['#7C3AED', '#2563EB'] as const,
-  textPrimary: '#FFFFFF',
-  textSecondary: 'rgba(255, 255, 255, 0.7)',
-  textMuted: 'rgba(255, 255, 255, 0.5)',
-  success: '#10B981',
+  background: '#0D1117',
+  backgroundSecondary: '#161B22',
+  glassBg: 'rgba(22, 27, 34, 0.95)',
+  glassBorder: 'rgba(48, 54, 61, 0.9)',
+  glassHighlight: 'rgba(48, 54, 61, 0.6)',
+  accentPrimary: '#3B82F6',
+  accentSecondary: '#06B6D4',
+  accentGradient: ['#3B82F6', '#06B6D4'] as const,
+  textPrimary: '#F1F5F9',
+  textSecondary: '#94A3B8',
+  textMuted: '#64748B',
+  success: '#22C55E',
   error: '#EF4444',
   warning: '#F59E0B',
 };
@@ -23,7 +23,7 @@ export const SPACING = {
   xl: 32,
   xxl: 48,
   xxxl: 64,
-  section: 80,
+  section: 56,
 };
 
 export const FONT_SIZES = {
@@ -33,16 +33,16 @@ export const FONT_SIZES = {
   lg: 18,
   xl: 20,
   xxl: 24,
-  xxxl: 32,
-  hero: 48,
-  display: 64,
+  xxxl: 30,
+  hero: 44,
+  display: 58,
 };
 
 export const BORDER_RADIUS = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
+  sm: 6,
+  md: 10,
+  lg: 14,
+  xl: 18,
   full: 9999,
 };
 
@@ -55,20 +55,20 @@ export const GLASS_STYLE = {
 
 export const SHADOWS = {
   glass: {
-    shadowColor: '#7C3AED',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   glow: {
-    shadowColor: '#7C3AED',
+    shadowColor: '#3B82F6',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 12,
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 8,
   },
 };
 
 export const MAX_WIDTH = 1200;
-export const NAVBAR_HEIGHT = 70;
+export const NAVBAR_HEIGHT = 64;

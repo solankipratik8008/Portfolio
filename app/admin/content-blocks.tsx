@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.glassBorder,
   },
   typeBtnActive: {
-    backgroundColor: 'rgba(124, 58, 237, 0.2)',
+    backgroundColor: 'rgba(59, 130, 246, 0.18)',
     borderColor: COLORS.accentPrimary,
   },
   typeBtnText: {

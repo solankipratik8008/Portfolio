@@ -21,23 +21,23 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onViewWork }: HeroSectionProps) {
-  const { personalInfo } = useData();
+  const { personalInfo, stats } = useData();
   const { currentPreset } = useTheme();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 700,
         useNativeDriver: true,
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
-        duration: 1000,
+        duration: 700,
         useNativeDriver: true,
       }),
     ]).start();
@@ -48,10 +48,6 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
 
   return (
     <View style={styles.container}>
-      {/* Decorative gradient orbs */}
-      <View style={[styles.orb, styles.orb1, { backgroundColor: currentPreset.primary }]} />
-      <View style={[styles.orb, styles.orb2, { backgroundColor: currentPreset.secondary }]} />
-
       <Animated.View
         style={[
           styles.content,
@@ -64,7 +60,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
       >
         {/* Profile photo */}
         {hasPhoto && (
-          <View style={[styles.avatarContainer, { borderColor: currentPreset.primary }]}>
+          <View style={[styles.avatarContainer, { borderColor: COLORS.accentPrimary }]}>
             <Image
               source={{ uri: (personalInfo as any).photoUrl }}
               style={styles.avatar}
@@ -73,20 +69,17 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
           </View>
         )}
 
-        <Text style={styles.greeting}>Hello, I'm</Text>
+        <Text style={styles.greeting}>iOS Developer</Text>
         <Text style={[styles.name, isMobile && styles.nameMobile]}>
           {personalInfo.name}
         </Text>
-        <View style={styles.roleContainer}>
-          <LinearGradient
-            colors={[currentPreset.primary, currentPreset.secondary]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.roleBadge}
-          >
+
+        <View style={styles.roleBadgeContainer}>
+          <View style={styles.roleBadge}>
             <Text style={styles.roleText}>{personalInfo.role}</Text>
-          </LinearGradient>
+          </View>
         </View>
+
         <Text style={[styles.tagline, isMobile && styles.taglineMobile]}>
           {personalInfo.tagline}
         </Text>
@@ -100,12 +93,12 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
             ]}
           >
             <LinearGradient
-              colors={[currentPreset.primary, currentPreset.secondary]}
+              colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.gradientButton}
             >
-              <Ionicons name="logo-apple" size={18} color="#fff" />
+              <Ionicons name="briefcase-outline" size={17} color="#fff" />
               <Text style={styles.buttonText}>View My Work</Text>
             </LinearGradient>
           </Pressable>
@@ -118,12 +111,22 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
                 hovered && styles.secondaryButtonHovered,
               ]}
             >
-              <Ionicons name="download-outline" size={18} color={currentPreset.primary} />
-              <Text style={[styles.secondaryButtonText, { color: currentPreset.primary }]}>
-                Download Resume
+              <Ionicons name="download-outline" size={17} color={COLORS.accentPrimary} />
+              <Text style={[styles.secondaryButtonText, { color: COLORS.accentPrimary }]}>
+                Resume
               </Text>
             </ExternalLink>
           )}
+        </View>
+
+        {/* Stats bar */}
+        <View style={[styles.statsBar, isMobile && styles.statsBarMobile]}>
+          {stats.map((stat, i) => (
+            <View key={stat.label} style={[styles.statItem, i < stats.length - 1 && styles.statItemBorder]}>
+              <Text style={styles.statValue}>{stat.value}</Text>
+              <Text style={styles.statLabel}>{stat.label}</Text>
+            </View>
+          ))}
         </View>
 
         <View style={styles.socials}>
@@ -140,7 +143,7 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
                 hovered && styles.socialIconHovered,
               ]}
             >
-              <Ionicons name={social.icon} size={22} color={COLORS.textSecondary} />
+              <Ionicons name={social.icon} size={20} color={COLORS.textSecondary} />
             </ExternalLink>
           ))}
         </View>
@@ -151,29 +154,11 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: Platform.OS === 'web' ? ('100vh' as any) : 700,
+    minHeight: Platform.OS === 'web' ? ('88vh' as any) : 620,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: NAVBAR_HEIGHT,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  orb: {
-    position: 'absolute',
-    borderRadius: 9999,
-    opacity: 0.15,
-  },
-  orb1: {
-    width: 400,
-    height: 400,
-    top: -100,
-    right: -100,
-  },
-  orb2: {
-    width: 300,
-    height: 300,
-    bottom: -50,
-    left: -80,
+    paddingBottom: SPACING.xl,
   },
   content: {
     maxWidth: MAX_WIDTH,
@@ -181,20 +166,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 2,
     overflow: 'hidden',
     marginBottom: SPACING.lg,
     ...SHADOWS.glow,
   },
   avatar: {
-    width: 120,
-    height: 120,
+    width: 96,
+    height: 96,
   },
   greeting: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.accentPrimary,
     fontWeight: '600',
     letterSpacing: 2,
@@ -206,65 +191,67 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: COLORS.textPrimary,
     textAlign: 'center',
-    letterSpacing: -1,
+    letterSpacing: -1.5,
   },
   nameMobile: {
     fontSize: FONT_SIZES.hero,
   },
-  roleContainer: {
+  roleBadgeContainer: {
     marginTop: SPACING.md,
-    marginBottom: SPACING.lg,
+    marginBottom: SPACING.md,
   },
   roleBadge: {
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.3)',
     paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
+    paddingVertical: SPACING.xs,
     borderRadius: 9999,
   },
   roleText: {
-    fontSize: FONT_SIZES.md,
-    color: '#fff',
+    fontSize: FONT_SIZES.sm,
+    color: COLORS.accentPrimary,
     fontWeight: '600',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   tagline: {
-    fontSize: FONT_SIZES.xl,
+    fontSize: FONT_SIZES.md,
     color: COLORS.textSecondary,
     textAlign: 'center',
-    maxWidth: 600,
-    lineHeight: 30,
-    marginBottom: SPACING.xl,
+    maxWidth: 560,
+    lineHeight: 26,
+    marginBottom: SPACING.lg,
   },
   taglineMobile: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.sm,
   },
   buttons: {
     flexDirection: 'row',
     gap: SPACING.md,
-    marginBottom: SPACING.xxl,
+    marginBottom: SPACING.xl,
   },
   buttonsMobile: {
     flexDirection: 'column',
     alignItems: 'center',
   },
   primaryButton: {
-    borderRadius: 12,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   primaryButtonHovered: {
-    opacity: 0.9,
-    transform: [{ scale: 1.02 }],
+    opacity: 0.88,
   },
   gradientButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderRadius: 12,
+    paddingVertical: 11,
+    borderRadius: 10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     fontWeight: '600',
   },
   secondaryButton: {
@@ -272,28 +259,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderRadius: 12,
+    paddingVertical: 11,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.accentPrimary,
-    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+    borderColor: 'rgba(59, 130, 246, 0.4)',
+    backgroundColor: 'rgba(59, 130, 246, 0.06)',
   },
   secondaryButtonHovered: {
-    backgroundColor: 'rgba(124, 58, 237, 0.2)',
-    transform: [{ scale: 1.02 }],
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
   },
   secondaryButtonText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     fontWeight: '600',
+  },
+  statsBar: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.glassBg,
+    borderWidth: 1,
+    borderColor: COLORS.glassBorder,
+    borderRadius: 12,
+    marginBottom: SPACING.lg,
+    overflow: 'hidden',
+  },
+  statsBarMobile: {
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  statItem: {
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.md,
+    alignItems: 'center',
+  },
+  statItemBorder: {
+    borderRightWidth: 1,
+    borderRightColor: COLORS.glassBorder,
+  },
+  statValue: {
+    fontSize: FONT_SIZES.xl,
+    fontWeight: '700',
+    color: COLORS.accentPrimary,
+  },
+  statLabel: {
+    fontSize: FONT_SIZES.xs,
+    color: COLORS.textMuted,
+    marginTop: 2,
   },
   socials: {
     flexDirection: 'row',
-    gap: SPACING.md,
+    gap: SPACING.sm,
   },
   socialIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 38,
+    height: 38,
+    borderRadius: 8,
     backgroundColor: COLORS.glassBg,
     borderWidth: 1,
     borderColor: COLORS.glassBorder,
@@ -301,7 +319,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   socialIconHovered: {
-    backgroundColor: COLORS.glassHighlight,
-    borderColor: COLORS.accentPrimary,
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
+    borderColor: 'rgba(59, 130, 246, 0.4)',
   },
 });

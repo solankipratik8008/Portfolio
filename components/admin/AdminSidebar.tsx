@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   menuItemActive: {
-    backgroundColor: 'rgba(124, 58, 237, 0.15)',
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
     borderLeftWidth: 3,
     borderLeftColor: COLORS.accentPrimary,
   },

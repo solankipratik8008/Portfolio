@@ -9,51 +9,43 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, MAX_WIDTH } from '../constants/theme';
 import { useData } from '../contexts/DataContext';
-import GlassCard from './GlassCard';
 import SectionTitle from './SectionTitle';
 
 export default function AboutSection() {
-  const { personalInfo, stats } = useData();
+  const { personalInfo } = useData();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
+  const hasPhoto = !!(personalInfo as any).photoUrl;
 
   return (
     <View style={styles.container}>
-      <SectionTitle title="About Me" subtitle="Get to know me better" />
+      <SectionTitle title="About Me" subtitle="iOS Developer based in Waterloo, ON" />
 
       <View style={[styles.content, isMobile && styles.contentMobile]}>
-        <View style={[styles.imageContainer, isMobile && styles.imageContainerMobile]}>
-          <GlassCard style={styles.avatarCard}>
+        {hasPhoto && (
+          <View style={[styles.imageContainer, isMobile && styles.imageContainerMobile]}>
             <Image
-              source={require('../assets/profile.png')}
-              style={styles.avatarImage}
+              source={{ uri: (personalInfo as any).photoUrl }}
+              style={styles.avatar}
+              resizeMode="cover"
             />
-          </GlassCard>
-        </View>
+          </View>
+        )}
 
-        <View style={[styles.textContent, isMobile && styles.textContentMobile]}>
+        <View style={[styles.textContent, (!hasPhoto || isMobile) && styles.textContentFull]}>
           <Text style={styles.bio}>{personalInfo.bio}</Text>
 
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
-              <Ionicons name="location-outline" size={18} color={COLORS.accentPrimary} />
+              <Ionicons name="location-outline" size={15} color={COLORS.accentPrimary} />
               <Text style={styles.infoText}>{personalInfo.location}</Text>
             </View>
             <View style={styles.infoItem}>
-              <Ionicons name="mail-outline" size={18} color={COLORS.accentPrimary} />
+              <Ionicons name="mail-outline" size={15} color={COLORS.accentPrimary} />
               <Text style={styles.infoText}>{personalInfo.email}</Text>
             </View>
           </View>
         </View>
-      </View>
-
-      <View style={[styles.statsRow, isMobile && styles.statsRowMobile]}>
-        {stats.map((stat) => (
-          <GlassCard key={stat.label} style={[styles.statCard, isMobile && styles.statCardMobile]}>
-            <Text style={styles.statValue}>{stat.value}</Text>
-            <Text style={styles.statLabel}>{stat.label}</Text>
-          </GlassCard>
-        ))}
       </View>
     </View>
   );
@@ -69,46 +61,37 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
-    gap: SPACING.xxl,
-    marginBottom: SPACING.xxl,
+    gap: SPACING.xl,
+    alignItems: 'flex-start',
   },
   contentMobile: {
     flexDirection: 'column',
     alignItems: 'center',
   },
   imageContainer: {
-    flex: 1,
-    alignItems: 'center',
+    flexShrink: 0,
   },
   imageContainerMobile: {
     marginBottom: SPACING.lg,
   },
-  avatarCard: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 220,
-    height: 220,
-  },
-  avatarImage: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
+  avatar: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     borderWidth: 2,
-    borderColor: COLORS.accentPrimary,
+    borderColor: 'rgba(59, 130, 246, 0.4)',
   },
   textContent: {
-    flex: 2,
-    justifyContent: 'center',
+    flex: 1,
   },
-  textContentMobile: {
-    alignItems: 'center',
+  textContentFull: {
+    flex: 1,
   },
   bio: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.textSecondary,
-    lineHeight: 26,
-    marginBottom: SPACING.lg,
-    textAlign: 'left',
+    lineHeight: 24,
+    marginBottom: SPACING.md,
   },
   infoRow: {
     flexDirection: 'row',
@@ -118,40 +101,10 @@ const styles = StyleSheet.create({
   infoItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: 6,
   },
   infoText: {
     fontSize: FONT_SIZES.sm,
     color: COLORS.textSecondary,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    gap: SPACING.md,
-  },
-  statsRowMobile: {
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  statCard: {
-    flex: 1,
-    alignItems: 'center',
-    minWidth: 140,
-    paddingVertical: SPACING.lg,
-  },
-  statCardMobile: {
-    flex: 0,
-    width: '45%',
-    marginBottom: SPACING.md,
-  },
-  statValue: {
-    fontSize: FONT_SIZES.xxxl,
-    fontWeight: '800',
-    color: COLORS.accentPrimary,
-    marginBottom: SPACING.xs,
-  },
-  statLabel: {
-    fontSize: FONT_SIZES.sm,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
   },
 });

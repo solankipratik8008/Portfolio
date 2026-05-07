@@ -26,17 +26,17 @@ export default function Root({ children }: { children: React.ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               :root {
-                --bg: #0a0118;
-                --bg-secondary: #1a0a2e;
-                --accent-primary: #7C3AED;
-                --accent-secondary: #2563EB;
-                --glass-bg: rgba(255,255,255,0.08);
-                --glass-border: rgba(255,255,255,0.15);
-                --glass-highlight: rgba(255,255,255,0.12);
-                --text-primary: #FFFFFF;
-                --text-secondary: rgba(255,255,255,0.7);
-                --text-muted: rgba(255,255,255,0.5);
-                --navbar-bg: rgba(10,1,24,0.85);
+                --bg: #0D1117;
+                --bg-secondary: #161B22;
+                --accent-primary: #3B82F6;
+                --accent-secondary: #06B6D4;
+                --glass-bg: rgba(22,27,34,0.95);
+                --glass-border: rgba(48,54,61,0.9);
+                --glass-highlight: rgba(48,54,61,0.6);
+                --text-primary: #F1F5F9;
+                --text-secondary: #94A3B8;
+                --text-muted: #64748B;
+                --navbar-bg: rgba(13,17,23,0.92);
               }
               body { background-color: var(--bg); margin: 0; overflow-x: hidden; }
               @font-face {

@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     paddingVertical: SPACING.sm,
     paddingHorizontal: SPACING.md,
-    backgroundColor: 'rgba(124, 58, 237, 0.08)',
+    backgroundColor: 'rgba(59, 130, 246, 0.06)',
     borderRadius: BORDER_RADIUS.md,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.2)',
+    borderColor: 'rgba(59, 130, 246, 0.18)',
   } as any,
   linkLabel: {
     fontSize: FONT_SIZES.md,

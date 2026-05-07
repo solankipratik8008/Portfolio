@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(124, 58, 237, 0.15)',
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: SPACING.md,

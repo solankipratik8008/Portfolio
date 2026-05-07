@@ -4,7 +4,6 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, NAVBAR_HEIGHT } from '../constants/theme';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
@@ -12,10 +11,10 @@ import AboutSection from '../components/AboutSection';
 import SkillsSection from '../components/SkillsSection';
 import ProjectsSection from '../components/ProjectsSection';
 import BuiltProjectsSection from '../components/BuiltProjectsSection';
+import VideoSection from '../components/VideoSection';
 import ExperienceSection from '../components/ExperienceSection';
 import EducationSection from '../components/EducationSection';
 import CertificationsSection from '../components/CertificationsSection';
-import VideoSection from '../components/VideoSection';
 import ContentBlocksSection from '../components/ContentBlocksSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
@@ -44,11 +43,6 @@ export default function Portfolio() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={[COLORS.background, COLORS.backgroundSecondary, COLORS.background]}
-        style={StyleSheet.absoluteFill}
-      />
-
       <Navbar onNavPress={scrollToSection} />
 
       <ScrollView
@@ -77,6 +71,11 @@ export default function Portfolio() {
           <BuiltProjectsSection />
         </View>
 
+        {/* Videos/demos live alongside the projects showcase */}
+        <View onLayout={handleLayout('videos')}>
+          <VideoSection />
+        </View>
+
         <View onLayout={handleLayout('experience')}>
           <ExperienceSection />
         </View>
@@ -87,10 +86,6 @@ export default function Portfolio() {
 
         <View onLayout={handleLayout('certifications')}>
           <CertificationsSection />
-        </View>
-
-        <View onLayout={handleLayout('videos')}>
-          <VideoSection />
         </View>
 
         <View>
