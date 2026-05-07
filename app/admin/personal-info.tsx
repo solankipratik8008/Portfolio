@@ -15,7 +15,7 @@ import { COLORS, SPACING, FONT_SIZES, BORDER_RADIUS } from '../../constants/them
 import { useData } from '../../contexts/DataContext';
 import {
   setDocument,
-  getCollectionData,
+  getAllDocuments,
   addDocument,
   deleteDocument,
   uploadFile,
@@ -98,8 +98,8 @@ export default function AdminPersonalInfo() {
     try {
       await setDocument('personalInfo', 'main', form);
 
-      // Delete existing stats and re-add
-      const existing = await getCollectionData<any>('stats');
+      // Use unordered fetch so deletion works even if orderBy index is missing
+      const existing = await getAllDocuments('stats');
       for (const item of existing) {
         await deleteDocument('stats', item.id);
       }

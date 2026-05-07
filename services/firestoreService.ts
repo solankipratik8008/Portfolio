@@ -28,6 +28,20 @@ export async function getCollectionData<T>(
   }
 }
 
+/** Fetch all documents without ordering — safe for delete operations even without indexes. */
+export async function getAllDocuments<T = Record<string, any>>(
+  collectionName: string
+): Promise<(T & { id: string })[]> {
+  try {
+    const db = getFirebaseDb();
+    if (!db) return [];
+    const snapshot = await getDocs(collection(db, collectionName));
+    return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as T & { id: string }));
+  } catch {
+    return [];
+  }
+}
+
 export async function getDocumentData<T>(
   collectionName: string,
   docId: string
