@@ -118,8 +118,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         getCollectionData<ContentBlock>('contentBlocks'),
       ]);
 
-      if (piData) setPersonalInfo(piData as any);
-      setStats(statsData.length ? statsData : STATS);
+      if (piData) {
+        setPersonalInfo(piData as any);
+        // Prefer statsArray embedded in personalInfo — avoids delete/re-add race conditions
+        const embedded = (piData as any).statsArray;
+        if (Array.isArray(embedded) && embedded.length > 0) {
+          setStats(embedded);
+        } else {
+          setStats(statsData.length ? statsData : STATS);
+        }
+      } else {
+        setStats(statsData.length ? statsData : STATS);
+      }
       setSkillCategories(skillsData.length ? skillsData : SKILL_CATEGORIES);
       setProjects(projData);
       setBuiltProjects(builtData);

@@ -119,15 +119,22 @@ export default function HeroSection({ onViewWork }: HeroSectionProps) {
           )}
         </View>
 
-        {/* Stats bar */}
-        <View style={[styles.statsBar, isMobile && styles.statsBarMobile]}>
-          {stats.map((stat, i) => (
-            <View key={stat.label} style={[styles.statItem, i < stats.length - 1 && styles.statItemBorder]}>
-              <Text style={styles.statValue}>{stat.value}</Text>
-              <Text style={styles.statLabel}>{stat.label}</Text>
+        {/* Stats bar — deduplicate by label as a safety guard */}
+        {(() => {
+          const unique = stats.filter(
+            (s, i, arr) => arr.findIndex((x) => x.label === s.label) === i
+          ).slice(0, 6);
+          return (
+            <View style={[styles.statsBar, isMobile && styles.statsBarMobile]}>
+              {unique.map((stat, i) => (
+                <View key={stat.label} style={[styles.statItem, i < unique.length - 1 && styles.statItemBorder]}>
+                  <Text style={styles.statValue}>{stat.value}</Text>
+                  <Text style={styles.statLabel}>{stat.label}</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          );
+        })()}
 
         <View style={styles.socials}>
           {[

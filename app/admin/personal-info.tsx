@@ -15,9 +15,6 @@ import { COLORS, SPACING, FONT_SIZES, BORDER_RADIUS } from '../../constants/them
 import { useData } from '../../contexts/DataContext';
 import {
   setDocument,
-  getAllDocuments,
-  addDocument,
-  deleteDocument,
   uploadFile,
   deleteFile,
 } from '../../services/firestoreService';
@@ -96,19 +93,16 @@ export default function AdminPersonalInfo() {
     setSaving(true);
     setSaved(false);
     try {
-      await setDocument('personalInfo', 'main', form);
+      // Save everything in one atomic write — embed statsArray inside personalInfo
+      // to avoid the delete-then-add race condition on the stats collection.
+      const cleanStats = statsList.map(({ label, value }: any, i: number) => ({
+        label,
+        value,
+        order: i,
+      }));
+      await setDocument('personalInfo', 'main', { ...(form as any), statsArray: cleanStats });
 
-      // Use unordered fetch so deletion works even if orderBy index is missing
-      const existing = await getAllDocuments('stats');
-      for (const item of existing) {
-        await deleteDocument('stats', item.id);
-      }
-      for (let i = 0; i < statsList.length; i++) {
-        const { order, ...rest } = statsList[i] as any;
-        await addDocument('stats', { ...rest, order: i });
-      }
-
-      refetch();
+      await refetch();
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (e: any) {
